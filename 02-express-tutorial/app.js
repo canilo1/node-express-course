@@ -4,7 +4,12 @@ const app = express();
 const PORT = 3000;
 const { products } = require("./data");
 app.use(express.static("./public"));
+const logger = (req, res, next) => {
+  console.log(`${req.method} ${req.url} at ${new Date().toISOString()}`);
+  next();
+};
 
+app.use(logger);
 app.get("/api/v1/test", (req, res) => {
   res.json({ message: "It worked!" });
 });

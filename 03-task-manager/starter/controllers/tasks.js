@@ -1,4 +1,4 @@
-const task = require('../models/task.js');
+
 const Task = require('../models/task.js');
 const getAllTasks = async (req, res) => {
     try {
@@ -49,7 +49,7 @@ const updateTask = async (req, res) => {
   }
     
 }
-deleteTask = async (req, res) => {
+const deleteTask = async (req, res) => {
     try{
         const { id:taskID} = req.params
         const task = await Task.findOneAndDelete({_id:taskID})

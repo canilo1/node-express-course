@@ -27,40 +27,28 @@ readFile('./content/first.txt', 'utf8', (err, result) => {
   })
 })
 console.log('starting next task')
-
-readFile('./answers/temporary/fileB.txt','utf8',(err,result)=> {
-  if(err){
-    console.log("The file was not read OH NOO",err)
-    return
-  }else{
-    const firstGrocery = result 
-    writeFileSync('./answers/temporary/fileB.txt',"Pizza 10.25$",(err,result)=>{
-      if(err){
-        console.log(err)
-        return 
-      }
-      console.log("Finnaly wrote the first grocery")
-    })
-     const secondGrocery = result
-      writeFileSync('./answers/temporary/fileB.txt',"Lemons 20.30$",(err,result)=>{
-        if(err){
-          console.log(err)
-          return 
-        }
-        console.log("Finnaly wrote teh second grocery")
-        
-      }) 
-      const thirdGrocery = result
-       writeFileSync('./answers/temporary/fileB.txt',"Potato 20.30$",(err,result)=>{
-        if(err){
-          console.log(err)
-          return 
-        }
-        console.log("Finnaly wrote teh second grocery")
-        
-      })  
-
-
+console.log('starting next task');
+writeFile('./temporary/fileB.txt', 'This is line 1\n', (err) => {
+  if (err) {
+    console.log('This error happened: ', err);
+    return;
   }
-})
-console.log("This is the end")
+  console.log('at point 1');
+  writeFile('./temporary/fileB.txt', 'This is line 2\n', { flag: 'a' }, (err) => {
+    if (err) {
+      console.log('This error happened: ', err);
+      return;
+    }
+    console.log('at point 2');
+    writeFile('./temporary/fileB.txt', 'This is line 3\n', { flag: 'a' }, (err) => {
+      if (err) {
+        console.log('This error happened: ', err);
+        return;
+      }
+      console.log('at point 3');
+      console.log('File writing complete!');
+    });
+  });
+});
+
+console.log('at end');

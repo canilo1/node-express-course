@@ -1,23 +1,32 @@
-const fs = require('fs');
+const { createReadStream } = require("fs");
+const path = require("path");
 
+// Create the path to the big file
+const filePath = path.join(__dirname, "../content/big.txt");
 
-const stream = fs.createReadStream('../content/big.txt', {
-  encoding: 'utf8',
-  highWaterMark: 200 
+// Create the read stream with encoding and highWaterMark
+const stream = createReadStream(filePath, {
+    encoding: "utf8",
+    highWaterMark: 200   // You will change this number to test later
 });
 
 let counter = 0;
 
-stream.on('data', (chunk) => {
-  counter++;
-  console.log(`Received chunk #${counter}:`);
-  console.log(chunk); 
+// Handle data event
+stream.on("data", (chunk) => {
+    counter++;
+    console.log(`Chunk #${counter}:`);
+    console.log(chunk);
+    console.log("--------------------------------------------------");
 });
 
-stream.on('end', () => {
-  console.log(`Stream ended. Total chunks received: ${counter}`);
+// Handle end event
+stream.on("end", () => {
+    console.log(`\nFinished reading file.`);
+    console.log(`Total chunks received: ${counter}`);
 });
 
-stream.on('error', (error) => {
-  console.error('Error reading the stream:', error);
+// Handle error event
+stream.on("error", (err) => {
+    console.error("Error:", err);
 });

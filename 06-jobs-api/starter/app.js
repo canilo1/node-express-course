@@ -4,17 +4,34 @@ const express = require('express');
 const app = express();
 
 // error handler
+//extra  security packages
+const helmet = require('helmet')
+const cors = require('cors')
+const xss = require('xss-clean')
+const rateLimit = require('express-rate-limit')
+const authRouter = require('./routes/auth')
+const jobsRouter = require('./routes/jobs')
 const notFoundMiddleware = require('./middleware/not-found');
 const errorHandlerMiddleware = require('./middleware/error-handler');
 
 app.use(express.json());
+app.use(cors())
+app.use(helmet())
+app.use(xss())
+app.use(rateLimit({
+  windowMS:15*60*1000,
+  max:100
+}))
 // extra packages
-
+//connect db
+const connectDb = require('./db/connect')
+const authUser = require('./middleware/authentication')
 // routes
 app.get('/', (req, res) => {
   res.send('jobs api');
 });
-
+app.use('/api/v1/auth',authRouter)
+app.use('/api/v1/jobs',authUser,jobsRouter)
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
 
@@ -22,6 +39,7 @@ const port = process.env.PORT || 3000;
 
 const start = async () => {
   try {
+    await connectDb(process.env.MONGO_URI)
     app.listen(port, () =>
       console.log(`Server is listening on port ${port}...`)
     );
